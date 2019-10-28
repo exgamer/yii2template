@@ -58,3 +58,9 @@ frontend
 vendor/                  contains dependent 3rd-party packages
 environments/            contains environment-based overrides
 ```
+
+php init
+
+composer update 
+
+php yii migrate/up --migrationPath=@concepture/yii2user/console/migrations --interactive=0

@@ -206,12 +206,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/exgamer/yii2-user-module.git",
-                "reference": "5d0f8134a6b51efbfff194af7e850085239a6157"
+                "reference": "16232b8e5a890d52cbac2c090dd1c8beb18549cc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/exgamer/yii2-user-module/zipball/5d0f8134a6b51efbfff194af7e850085239a6157",
-                "reference": "5d0f8134a6b51efbfff194af7e850085239a6157",
+                "url": "https://api.github.com/repos/exgamer/yii2-user-module/zipball/16232b8e5a890d52cbac2c090dd1c8beb18549cc",
+                "reference": "16232b8e5a890d52cbac2c090dd1c8beb18549cc",
                 "shasum": ""
             },
             "require": {
@@ -241,7 +241,7 @@
                 }
             ],
             "description": "package under development",
-            "time": "2019-10-28T16:08:35+00:00"
+            "time": "2019-10-28T16:34:22+00:00"
         },
         {
             "name": "doctrine/lexer",
