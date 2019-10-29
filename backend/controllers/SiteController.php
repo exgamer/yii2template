@@ -1,11 +1,12 @@
 <?php
 namespace backend\controllers;
 
+use concepture\yii2user\forms\SignInForm;
+use concepture\yii2user\services\AuthService;
 use Yii;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
-use common\models\LoginForm;
 
 /**
  * Site controller
@@ -74,16 +75,20 @@ class SiteController extends Controller
             return $this->goHome();
         }
 
-        $model = new LoginForm();
-        if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
-        } else {
-            $model->password = '';
+        $model = new SignInForm();
+        if ($model->load(Yii::$app->request->post()) ) {
+            try{
+                $this->getAuthService()->signIn($model);
+                return $this->goBack();
+            }catch (\Exception $exception){
 
-            return $this->render('login', [
-                'model' => $model,
-            ]);
+            }
         }
+        $model->validation = '';
+
+        return $this->render('login', [
+            'model' => $model,
+        ]);
     }
 
     /**
@@ -96,5 +101,13 @@ class SiteController extends Controller
         Yii::$app->user->logout();
 
         return $this->goHome();
+    }
+
+    /**
+     * @return AuthService
+     */
+    public function getAuthService()
+    {
+        return Yii::$app->authService;
     }
 }
