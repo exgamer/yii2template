@@ -11,9 +11,23 @@ return [
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'controllerNamespace' => 'frontend\controllers',
+    'modules' => [
+        'languages' => [
+            'class' => 'klisl\languages\Module',
+            //Языки используемые в приложении
+            'languages' => [
+                'Русский' => 'ru',
+                'English' => 'en'
+            ],
+            'default_language' => 'ru', //основной язык (по-умолчанию)
+            'show_default' => false, //true - показывать в URL основной язык, false - нет
+        ],
+    ],
     'components' => [
         'request' => [
             'csrfParam' => '_csrf-frontend',
+            'baseUrl' => '', //убрать frontend/web
+            'class' => 'klisl\languages\Request'
         ],
 //        'user' => [
 //            'identityClass' => 'common\models\User',
@@ -36,14 +50,13 @@ return [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
-        /*
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
-            'rules' => [
-            ],
+            'enableStrictParsing' => true,
+            'class' => 'klisl\languages\UrlManager',
+            'rules' => require __DIR__ . '/routes.php',
         ],
-        */
     ],
     'params' => $params,
 ];

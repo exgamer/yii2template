@@ -5,7 +5,7 @@
 $this->title = 'My Yii Application';
 ?>
 <div class="site-index">
-
+    <?= klisl\languages\widgets\ListWidget::widget() ?>
     <div class="jumbotron">
         <h1>Congratulations!</h1>
 
