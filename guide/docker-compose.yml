@@ -1,0 +1,36 @@
+version: '2'
+services:
+  postgres:
+    image: postgres:latest
+    volumes:
+       - ./db/postgres:/var/lib/postgres
+    ports:
+      - 5432:5432
+  db:
+    image: mariadb:10
+    volumes:
+       - ./db/mysql:/var/lib/mysql
+    environment:
+      - TZ=Asia/Almaty
+      - MYSQL_ROOT_PASSWORD=rootpass
+      - ALLOW_EMPTY_PASSWORD=yes
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=123
+    ports:
+      - 3306:3306
+  citizenzet-crm:
+    image: citizenzet/crm:latest
+    volumes:
+      - ./../PhpstormProjects/yii2template:/var/www/yii2template
+      - ./../PhpstormProjects/yii2template/environments/dev/frontend/nginx-front:/etc/nginx/sites-enabled/yii2template-nginx-front
+      - ./../PhpstormProjects/yii2template/environments/dev/backend/nginx-admin:/etc/nginx/sites-enabled/yii2template-nginx-admin
+    ports:
+      - 0.0.0.0:80:80
+      - 8000:8000
+    restart: always
+    links:
+      - db:mysql
+    environment:
+      TZ: "Asia/Almaty"
+      TERM: "xterm"
+      OPCACHE_REVALIDATE: "1"
