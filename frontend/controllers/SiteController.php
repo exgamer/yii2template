@@ -3,6 +3,7 @@ namespace frontend\controllers;
 
 use concepture\yii2user\forms\SignInForm;
 use concepture\yii2user\services\AuthService;
+use Exception;
 use frontend\models\ResendVerificationEmailForm;
 use frontend\models\VerifyEmailForm;
 use Yii;
@@ -83,6 +84,7 @@ class SiteController extends Controller
      * Logs in a user.
      *
      * @return mixed
+     * @throws Exception
      */
     public function actionLogin()
     {
@@ -91,13 +93,8 @@ class SiteController extends Controller
         }
 
         $model = new SignInForm();
-        if ($model->load(Yii::$app->request->post()) ) {
-            try{
-                $this->getAuthService()->signIn($model);
-                return $this->goBack();
-            }catch (\Exception $exception){
-
-            }
+        if ($model->load(Yii::$app->request->post()) && $this->getAuthService()->signIn($model) ) {
+            return $this->goBack();
         }
         $model->validation = '';
 
@@ -163,18 +160,14 @@ class SiteController extends Controller
      * Signs user up.
      *
      * @return mixed
+     * @throws Exception
      */
     public function actionSignup()
     {
         $model = new SignupForm();
-        if ($model->load(Yii::$app->request->post())) {
-            try{
-                $this->getAuthService()->signUp($model);
-                Yii::$app->session->setFlash('success', 'Thank you for registration. Please check your inbox for verification email.');
-                return $this->goHome();
-            }catch (\Exception $exception){
-
-            }
+        if ($model->load(Yii::$app->request->post()) && $this->getAuthService()->signUp($model)) {
+            Yii::$app->session->setFlash('success', 'Thank you for registration. Please check your inbox for verification email.');
+            return $this->goHome();
         }
 
         return $this->render('signup', [
@@ -186,19 +179,15 @@ class SiteController extends Controller
      * Requests password reset.
      *
      * @return mixed
+     * @throws Exception
      */
     public function actionRequestPasswordReset()
     {
         $model = new EmailPasswordResetRequestForm();
-        if ($model->load(Yii::$app->request->post())) {
-//            try{
-            $this->getAuthService()->sendPasswordResetEmail($model);
+        if ($model->load(Yii::$app->request->post()) && $this->getAuthService()->sendPasswordResetEmail($model)) {
             Yii::$app->session->setFlash('success', 'Check your email for further instructions.');
 
             return $this->goHome();
-//            }catch (\Exception $exception){
-//                Yii::$app->session->setFlash('error', 'Sorry, we are unable to reset password for the provided email address.');
-//            }
         }
 
         return $this->render('requestPasswordResetToken', [
@@ -221,15 +210,10 @@ class SiteController extends Controller
             throw new BadRequestHttpException($e->getMessage());
         }
 
-        if ($model->load(Yii::$app->request->post()) ) {
-            //            try{
-            $this->getAuthService()->changePassword($model);
+        if ($model->load(Yii::$app->request->post()) && $this->getAuthService()->changePassword($model)) {
             Yii::$app->session->setFlash('success', 'New password saved.');
 
             return $this->goHome();
-//            }catch (\Exception $exception){
-
-//            }
         }
 
         return $this->render('resetPassword', [

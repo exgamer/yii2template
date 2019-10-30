@@ -3,6 +3,7 @@ namespace backend\controllers;
 
 use concepture\yii2user\forms\SignInForm;
 use concepture\yii2user\services\AuthService;
+use Exception;
 use Yii;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
@@ -68,6 +69,7 @@ class SiteController extends Controller
      * Login action.
      *
      * @return string
+     * @throws Exception
      */
     public function actionLogin()
     {
@@ -76,13 +78,8 @@ class SiteController extends Controller
         }
 
         $model = new SignInForm();
-        if ($model->load(Yii::$app->request->post()) ) {
-            try{
-                $this->getAuthService()->signIn($model);
-                return $this->goBack();
-            }catch (\Exception $exception){
-
-            }
+        if ($model->load(Yii::$app->request->post()) && $this->getAuthService()->signIn($model) ) {
+            return $this->goBack();
         }
         $model->validation = '';
 
